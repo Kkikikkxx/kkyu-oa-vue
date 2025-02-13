@@ -1,7 +1,6 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
-import * as echarts from 'echarts'
-import { getTotalUser ,getLeaveUser } from '@/api/index.js'
+import {onMounted, ref} from 'vue'
+import {getLeaveUser, getTotalUser} from '@/api/index.js'
 
 const totalUser = ref(null) // 用 ref 变量存储员工总数
 const leaveUser = ref(null) // 用 ref 变量存储离职员工数
@@ -20,46 +19,11 @@ const fetchLeaveUser = async () => {
 onMounted(() => {
   fetchTotalUser() // 调用获取员工总数的接口
   fetchLeaveUser() // 调用获取离职员工数的接口
-
-  // 初始化图表
-  const myChart = echarts.init(document.getElementById('main'))
-
-  // 配置项
-  const option = {
-    xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        data: [120, 200, 150, 80, 70, 110, 130],
-        type: 'bar',
-        itemStyle: {
-          color: '#6366f1' // 使用主题色
-        }
-      }
-    ]
-  }
-
-  myChart.setOption(option)
-
-  // 响应式调整
-  const resizeHandler = () => myChart.resize()
-  window.addEventListener('resize', resizeHandler)
-
-  // 组件卸载时清理
-  onUnmounted(() => {
-    window.removeEventListener('resize', resizeHandler)
-    myChart.dispose()
-  })
 })
 </script>
 
 <template>
-  <div class="echarts-test">
+  <div class="data-show">
     <!-- 新增用户信息牌的容器 -->
     <div class="user-cards">
       <!-- 显示总用户数 -->
@@ -82,7 +46,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 /* 添加容器尺寸 */
-.echarts-test {
+.data-show {
   width: 100%;
   height: 500px;
   margin-top: 20px;
@@ -120,10 +84,5 @@ onMounted(() => {
   font-size: 24px;
   font-weight: bold;
   text-align: center;
-}
-
-#main {
-  width: 100%;
-  height: 100%;
 }
 </style>
