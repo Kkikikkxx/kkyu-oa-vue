@@ -63,7 +63,6 @@ app.component('ImageUpload', ImageUpload)
 app.component('ImagePreview', ImagePreview)
 app.component('RightToolbar', RightToolbar)
 app.component('Editor', Editor)
-
 app.use(router)
 app.use(store)
 app.use(plugins)
