@@ -1,6 +1,6 @@
 <script setup>
-import {onMounted, ref} from 'vue'
-import {getLeaveUser, getTotalUser} from '@/api/index.js'
+import { onMounted, ref } from 'vue'
+import { getLeaveUser, getTotalUser } from '@/api/index.js'
 
 const totalUser = ref(null) // 用 ref 变量存储员工总数
 const leaveUser = ref(null) // 用 ref 变量存储离职员工数
@@ -22,67 +22,143 @@ onMounted(() => {
 })
 </script>
 
+
 <template>
   <div class="data-show">
-    <!-- 新增用户信息牌的容器 -->
     <div class="user-cards">
-      <!-- 显示总用户数 -->
-      <div class="user-card">
+      <div class="user-card total-card">
+        <div class="decorative-circle"></div>
+        <div class="card-icon">
+          <!-- 团队图标 -->
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
         <span class="user-card-title">员工总数</span>
         <span class="user-card-value">{{ totalUser ?? '加载中...' }}</span>
+        <div class="stat-trend">↑12% 同比上月</div>
       </div>
 
-      <!-- 显示离职员工数 -->
-      <div class="user-card">
+      <div class="user-card leave-card">
+        <div class="decorative-circle"></div>
+        <div class="card-icon">
+          <!-- 离职图标 -->
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M13 7l5 5-5 5M6 17V7h5"/>
+          </svg>
+        </div>
         <span class="user-card-title">离职员工数</span>
         <span class="user-card-value">{{ leaveUser ?? '加载中...' }}</span>
+        <div class="stat-trend">↓3% 同比上月</div>
       </div>
     </div>
-
-    <!-- ECharts 图表容器 -->
-    <div id="main"></div>
   </div>
 </template>
 
 <style scoped lang="scss">
-/* 添加容器尺寸 */
 .data-show {
   width: 100%;
-  height: 500px;
-  margin-top: 20px;
+  min-height: 100vh;
+  padding: 40px;
+  background: #f5f7fa;
 }
 
-/* 新增样式：用户信息牌容器，令两牌居中并排 */
 .user-cards {
   display: flex;
   justify-content: center;
-  gap: 20px; /* 两牌间隔20px */
-  margin-bottom: 20px; /* 与下方图表保持间距 */
+  gap: 30px;
+  flex-wrap: wrap;
 }
 
 .user-card {
+  position: relative;
+  overflow: hidden;
+  padding: 30px;
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+    .decorative-circle {
+      transform: scale(1.2);
+    }
+  }
+}
+
+.total-card {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.leave-card {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+}
+
+.decorative-circle {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  top: -30px;
+  right: -30px;
+  transition: transform 0.3s ease;
+}
+
+/* 修改.card-icon样式 */
+.card-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 15px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #6a8fdb, #5566f2); /* 渐变色背景 */
-  color: white;
-  padding: 20px;
-  border-radius: 12px; /* 圆角 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 阴影 */
-  width: 260px; /* 设置固定宽度 */
-  height: 160px; /* 设置固定高度 */
+
+  svg {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
 }
 
 .user-card-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
 }
 
 .user-card-value {
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 10px 0;
+}
+
+.stat-trend {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  margin-top: 12px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  backdrop-filter: blur(5px);
+}
+
+@media (max-width: 768px) {
+  .user-card {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .data-show {
+    padding: 20px;
+  }
 }
 </style>
