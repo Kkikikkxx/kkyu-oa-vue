@@ -1,18 +1,10 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="员工姓名" prop="employeeName">
+    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="88px">
+      <el-form-item label="员工姓名"  prop="employeeName">
         <el-input
           v-model="queryParams.employeeName"
           placeholder="请输入员工姓名"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="基本工资" prop="baseSalary">
-        <el-input
-          v-model="queryParams.baseSalary"
-          placeholder="请输入基本工资"
           clearable
           @keyup.enter="handleQuery"
         />
@@ -75,13 +67,12 @@
 
     <el-table v-loading="loading" :data="salaryList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="序号" type="index" width="55" align="center" prop="id" />
+      <el-table-column label="主键ID" align="center" prop="salaryId" />
       <el-table-column label="员工姓名" align="center" prop="employeeName" />
       <el-table-column label="基本工资" align="center" prop="baseSalary" />
       <el-table-column label="奖金" align="center" prop="bonus" />
       <el-table-column label="扣除项" align="center" prop="deductions" />
       <el-table-column label="实发工资" align="center" prop="netSalary" />
-      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['finance:salary:edit']">修改</el-button>
@@ -116,9 +107,6 @@
         <el-form-item label="实发工资" prop="netSalary">
           <el-input v-model="form.netSalary" placeholder="请输入实发工资" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" placeholder="请输入备注" />
-        </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -151,7 +139,7 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     employeeName: null,
-    baseSalary: null,
+    remark: null
   },
   rules: {
     employeeName: [
@@ -160,6 +148,12 @@ const data = reactive({
     baseSalary: [
       { required: true, message: "基本工资不能为空", trigger: "blur" }
     ],
+    netSalary: [
+      { required: true, message: "实发工资不能为空", trigger: "blur" }
+    ],
+    remark: [
+      { required: true, message: "备注不能为空", trigger: "blur" }
+    ]
   }
 });
 
@@ -184,7 +178,7 @@ function cancel() {
 // 表单重置
 function reset() {
   form.value = {
-    id: null,
+    salaryId: null,
     employeeName: null,
     baseSalary: null,
     bonus: null,
@@ -213,7 +207,7 @@ function resetQuery() {
 
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.id);
+  ids.value = selection.map(item => item.salaryId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -228,8 +222,8 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  const _id = row.id || ids.value
-  getSalary(_id).then(response => {
+  const _salaryId = row.salaryId || ids.value
+  getSalary(_salaryId).then(response => {
     form.value = response.data;
     open.value = true;
     title.value = "修改薪资管理";
@@ -240,7 +234,7 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["salaryRef"].validate(valid => {
     if (valid) {
-      if (form.value.id != null) {
+      if (form.value.salaryId != null) {
         updateSalary(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
           open.value = false;
@@ -259,9 +253,9 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除薪资管理编号为"' + _ids + '"的数据项？').then(function() {
-    return delSalary(_ids);
+  const _salaryIds = row.salaryId || ids.value;
+  proxy.$modal.confirm('是否确认删除薪资管理编号为"' + _salaryIds + '"的数据项？').then(function() {
+    return delSalary(_salaryIds);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");

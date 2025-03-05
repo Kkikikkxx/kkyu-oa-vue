@@ -16,7 +16,7 @@
         <!--用户数据-->
         <pane size="84">
           <el-col>
-            <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
+            <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="88px">
               <el-form-item label="用户账号" prop="userName">
                 <el-input v-model="queryParams.userName" placeholder="请输入用户账号" clearable style="width: 240px" @keyup.enter="handleQuery" />
               </el-form-item>
