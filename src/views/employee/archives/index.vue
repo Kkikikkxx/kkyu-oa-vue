@@ -17,48 +17,6 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="性别" prop="gender">
-        <el-select v-model="queryParams.gender" placeholder="请选择性别" clearable style="width: 220px">
-          <el-option
-            v-for="dict in sys_user_sex"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="出生日期" prop="birthDate">
-        <el-date-picker clearable
-          v-model="queryParams.birthDate"
-          type="date"
-          value-format="YYYY-MM-DD"
-          placeholder="请选择出生日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="部门ID" prop="deptId">
-        <el-input
-          v-model="queryParams.deptId"
-          placeholder="请输入部门ID"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="职位" prop="position">
-        <el-input
-          v-model="queryParams.position"
-          placeholder="请输入职位"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="入职日期" prop="hireDate">
-        <el-date-picker clearable
-          v-model="queryParams.hireDate"
-          type="date"
-          value-format="YYYY-MM-DD"
-          placeholder="请选择入职日期">
-        </el-date-picker>
-      </el-form-item>
       <el-form-item label="联系电话" prop="phone">
         <el-input
           v-model="queryParams.phone"
@@ -67,29 +25,15 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input
-          v-model="queryParams.email"
-          placeholder="请输入邮箱"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="身份证号码" prop="idNumber">
-        <el-input
-          v-model="queryParams.idNumber"
-          placeholder="请输入身份证号码"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="联系地址" prop="address">
-        <el-input
-          v-model="queryParams.address"
-          placeholder="请输入联系地址"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+      <el-form-item label="员工状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择员工状态" clearable>
+          <el-option
+            v-for="dict in sys_normal_disable"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -154,8 +98,6 @@
           <span>{{ parseTime(scope.row.birthDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="部门ID" align="center" prop="deptId" />
-      <el-table-column label="职位" align="center" prop="position" />
       <el-table-column label="入职日期" align="center" prop="hireDate" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.hireDate, '{y}-{m}-{d}') }}</span>
@@ -165,7 +107,11 @@
       <el-table-column label="邮箱" align="center" prop="email" />
       <el-table-column label="身份证号码" align="center" prop="idNumber" />
       <el-table-column label="联系地址" align="center" prop="address" />
-      <el-table-column label="员工状态" align="center" prop="status" />
+      <el-table-column label="员工状态" align="center" prop="status">
+        <template #default="scope">
+          <dict-tag :options="sys_normal_disable" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
@@ -185,7 +131,7 @@
 
     <!-- 添加或修改员工档案管理对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="archivesRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="archivesRef" :model="form" :rules="rules" label-width="88px">
         <el-form-item label="员工编号" prop="employeeCode">
           <el-input v-model="form.employeeCode" placeholder="请输入员工编号" />
         </el-form-item>
@@ -210,12 +156,6 @@
             placeholder="请选择出生日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
-        </el-form-item>
-        <el-form-item label="职位" prop="position">
-          <el-input v-model="form.position" placeholder="请输入职位" />
-        </el-form-item>
         <el-form-item label="入职日期" prop="hireDate">
           <el-date-picker clearable
             v-model="form.hireDate"
@@ -236,6 +176,15 @@
         <el-form-item label="联系地址" prop="address">
           <el-input v-model="form.address" placeholder="请输入联系地址" />
         </el-form-item>
+        <el-form-item label="员工状态" prop="status">
+          <el-radio-group v-model="form.status">
+            <el-radio
+              v-for="dict in sys_normal_disable"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -254,7 +203,7 @@
 import { listArchives, getArchives, delArchives, addArchives, updateArchives } from "@/api/employee/archives";
 
 const { proxy } = getCurrentInstance();
-const { sys_user_sex } = proxy.useDict('sys_user_sex');
+const { sys_user_sex, sys_normal_disable } = proxy.useDict('sys_user_sex', 'sys_normal_disable');
 
 const archivesList = ref([]);
 const open = ref(false);
@@ -273,15 +222,7 @@ const data = reactive({
     pageSize: 10,
     employeeCode: null,
     employeeName: null,
-    gender: null,
-    birthDate: null,
-    deptId: null,
-    position: null,
-    hireDate: null,
     phone: null,
-    email: null,
-    idNumber: null,
-    address: null,
     status: null,
   },
   rules: {
@@ -326,8 +267,6 @@ function reset() {
     employeeName: null,
     gender: null,
     birthDate: null,
-    deptId: null,
-    position: null,
     hireDate: null,
     phone: null,
     email: null,
