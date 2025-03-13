@@ -59,7 +59,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2018-2025 kkyu All Rights Reserved.</span>
+      <span>Copyright © 2025 kkyu All Rights Reserved.</span>
     </div>
   </div>
 </template>
@@ -165,11 +165,12 @@ getCookie();
 <style lang='scss' scoped>
 .login {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   height: 100%;
   background-image: url("../assets/images/login-background.jpg");
   background-size: cover;
+  padding-right: 150px;
 }
 .title {
   margin: 0px auto 30px auto;
@@ -209,11 +210,11 @@ getCookie();
   }
 }
 .el-login-footer {
-  height: 40px;
-  line-height: 40px;
-  position: fixed;
+  position: absolute;
   bottom: 0;
-  width: 100%;
+  left: 50%;
+  transform: translateX(-50%); /* 让其居中 */
+  width: 100%; /* 确保宽度适应 */
   text-align: center;
   color: #fff;
   font-family: Arial;
