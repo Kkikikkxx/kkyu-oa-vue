@@ -26,7 +26,7 @@
         />
       </el-form-item>
       <el-form-item label="员工状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择员工状态" clearable>
+        <el-select v-model="queryParams.status" placeholder="请选择员工状态" style="width: 200px;" clearable>
           <el-option
             v-for="dict in sys_normal_disable"
             :key="dict.value"
